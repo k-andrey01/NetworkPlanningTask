@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 
 public class Main {
+    static int n = 9;
+
     public static void main(String[] args) {
         Way myWay = new Way();
 
@@ -40,10 +42,10 @@ public class Main {
 
         System.out.println("\n=======================================");
         System.out.println("РАННИЕ СРОКИ СОВЕРШЕНИЯ СОБЫТИЙ");
-        int[] earlyArr = new int[9];
+        int[] earlyArr = new int[n];
         earlyArr[0]=0;
         System.out.println("Ранний срок совершения события 1: "+earlyArr[0]);
-        for (int i = 1; i<9; i++){
+        for (int i = 1; i<n; i++){
             int max = Integer.MIN_VALUE;
             if (myWay.getWay(1,i+1,graph)!=null){
                 max = myWay.getWay(1,i+1,graph).getWeight();
@@ -59,24 +61,24 @@ public class Main {
 
         System.out.println("\n=======================================");
         System.out.println("ДЛИНА КРИТИЧЕСКОГО ПУТИ");
-        System.out.println("Время выполнения проекта (длина критического пути): "+earlyArr[8]);
+        System.out.println("Время выполнения проекта (длина критического пути): "+earlyArr[n-1]);
 
         System.out.println("\n=======================================");
         System.out.println("ПОЗДНИЕ СРОКИ СОВЕРШЕНИЯ СОБЫТИЙ");
-        int[] lateArr = {earlyArr[8],earlyArr[8],earlyArr[8],earlyArr[8],earlyArr[8],earlyArr[8],earlyArr[8],earlyArr[8],earlyArr[8]};
-        for (int i=7; i>=0; i--){
+        int[] lateArr = {earlyArr[n-1],earlyArr[n-1],earlyArr[n-1],earlyArr[n-1],earlyArr[n-1],earlyArr[n-1],earlyArr[n-1],earlyArr[n-1],earlyArr[n-1]};
+        for (int i=n-2; i>=0; i--){
             int min = Integer.MAX_VALUE;
-            if (myWay.getWay(i+1,9,graph)!=null){
-                min = lateArr[i]-myWay.getWay(i+1,9,graph).getWeight();
+            if (myWay.getWay(i+1,n,graph)!=null){
+                min = lateArr[i]-myWay.getWay(i+1,n,graph).getWeight();
             }
-            for (int j=7;j>i;j--){
-                if (myWay.getWay(i+1,j+1,graph)!=null && min>lateArr[i]-myWay.getWay(i+1,j+1,graph).getWeight()-(lateArr[8]-lateArr[j])){
-                    min = lateArr[i]-myWay.getWay(i+1,j+1,graph).getWeight()-(lateArr[8]-lateArr[j]);
+            for (int j=n-2;j>i;j--){
+                if (myWay.getWay(i+1,j+1,graph)!=null && min>lateArr[i]-myWay.getWay(i+1,j+1,graph).getWeight()-(lateArr[n-1]-lateArr[j])){
+                    min = lateArr[i]-myWay.getWay(i+1,j+1,graph).getWeight()-(lateArr[n-1]-lateArr[j]);
                 }
             }
             lateArr[i] = min;
         }
-        for (int i=0; i<9; i++){
+        for (int i=0; i<n; i++){
             System.out.println("Поздний срок совершения события "+(i+1)+": "+lateArr[i]);
         }
 
@@ -118,7 +120,7 @@ public class Main {
         System.out.println("\n\n=======================================");
         System.out.println("КРИТИЧЕСКИЙ ПУТЬ");
         ArrayList<Integer> critWay = new ArrayList<>();
-        for (int i=0; i<9; i++){
+        for (int i=0; i<n; i++){
             if (lateArr[i] == earlyArr[i])
                 critWay.add(i+1);
         }
@@ -142,12 +144,12 @@ public class Main {
 
         System.out.println("\n=======================================");
         System.out.println("ИЗМЕНЕНИЕ ВРЕМЕНИ ВЫПОЛНЕНИЯ ПРОЕКТА");
-        int res = earlyArr[8];
+        int res = earlyArr[n-1];
         if (critWay.contains(6) && critWay.contains(8)){
             res+=4;
             System.out.println("Старое время выполнения проекта: "+res);
             System.out.println("Новое время выполнения проекта: "+res);
-            System.out.println("Разница: "+(earlyArr[8]-res));
+            System.out.println("Разница: "+(earlyArr[n-1]-res));
         }else{
             System.out.println("Не изменится");
         }
@@ -155,15 +157,9 @@ public class Main {
 
     private static ArrayList<Integer> getPoints(){
         ArrayList<Integer> points = new ArrayList<>();
-        points.add(1);
-        points.add(2);
-        points.add(3);
-        points.add(4);
-        points.add(5);
-        points.add(6);
-        points.add(7);
-        points.add(8);
-        points.add(9);
+        for (int i = 1; i <= n; i++){
+            points.add(i);
+        }
 
         return points;
     }
